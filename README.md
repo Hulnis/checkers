@@ -6,9 +6,9 @@
 2) In Game
   a) Backend game state
      1) List of checkers
-       a) grid position - int index
-       b) color - string (red or black)
-       c) isKing - boolean - default false
+       grid position - int index
+       color - string (red or black)
+       isKing - boolean - default false
      2) Game State
        a) "pregame"
        b) "ingame"
