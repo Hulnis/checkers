@@ -2,9 +2,9 @@
 
 1) Pre Game
 
-  a) View: see the checkerboard, message on top "Waiting for two players"
+  A) View: see the checkerboard, message on top "Waiting for two players"
   
-  b) On connect, look up elixir session stuff about players (Or use a login session) Decide Later
+  B) On connect, look up elixir session stuff about players (Or use a login session) Decide Later
   
 2) In Game
   a) Backend game state
