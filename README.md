@@ -35,4 +35,4 @@
     
 5) Front end state
   a) list of checkers
-  b) message
+  b) message 
