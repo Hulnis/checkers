@@ -9,6 +9,7 @@
        - grid position - int index
        - color - string (red or black)
        - isKing - boolean - default false
+       - index - for uniqueness stuff
      - Game State
        - "pregame"
        - "ingame"

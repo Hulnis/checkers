@@ -86,7 +86,7 @@ class CheckersGame extends React.Component {
     demoCheckers.push({
       color: "red",
       index: 0,
-      x: 0,
+      x: 1,
       y: 1,
     })
     const grid = []
@@ -105,7 +105,7 @@ class CheckersGame extends React.Component {
         colorSwitch = !colorSwitch
         const square = <Rect key={"index:" + i + ", " + j} x={i * 100} y={j * 100}
                              width={100} height={100} fill={color}
-                             onClick={()=>this.clickRect(1 + x + (y * 8))}/>
+                             onClick={()=>this.clickRect(i + (j * 8))}/>
         grid.push(square)
       }
     }
@@ -113,7 +113,7 @@ class CheckersGame extends React.Component {
     demoCheckers.forEach((checker) => {
       grid.push( <Circle key={
         checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
-        radius={40} onClick={() => this.clickChecker(index)} />
+        radius={40} onClick={() => this.clickChecker(checker.index)} />
       )
     })
     grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
