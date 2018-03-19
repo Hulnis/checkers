@@ -80,9 +80,9 @@ defmodule Checkers.Game do
   end
 
   defp move(state, from = %{index: index}, to) do
-    from = crown(from)
+    from = %{from | index: to} |> crown(to)
     board = state[:board]
-    |> List.replace_at(to, %{from | index: to})
+    |> List.replace_at(to, from)
     |> List.replace_at(index, nil)
     %{state | board: board, current_player: next_player(state)}
   end
