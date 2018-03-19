@@ -112,8 +112,8 @@ class CheckersGame extends React.Component {
     console.log("demoCheckers", demoCheckers)
     demoCheckers.forEach((checker) => {
       grid.push( <Circle key={
-        checker.index} fill={checker.color} x={checker.x * 100} y={checker.y * 100}
-        onClick={() => this.clickChecker(index)} />
+        checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
+        radius={40} onClick={() => this.clickChecker(index)} />
       )
     })
     grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
