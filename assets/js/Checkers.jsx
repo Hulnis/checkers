@@ -14,16 +14,10 @@ class CheckersGame extends React.Component {
     // Setup socket and stuff
     this.channel = props.channel
 
-    const demoCheckers = []
-    demoCheckers.push({
-      color: "red",
-      index: 0,
-      x: 0,
-      y: 1,
-    })
+
 
     this.state = {
-      checkers: demoCheckers,
+      checkers: [],
       messages: [],
       prevClick: null,
     }
@@ -73,9 +67,16 @@ class CheckersGame extends React.Component {
 
   render() {
     const {
-      checkers,
+      // checkers,
       messages,
     } = this.state
+    const demoCheckers = []
+    demoCheckers.push({
+      color: "red",
+      index: 0,
+      x: 0,
+      y: 1,
+    })
     const grid = []
     var colorSwitch = false
     // if(checkers.length === 0) {
@@ -84,7 +85,6 @@ class CheckersGame extends React.Component {
     for (var i = 0; i < 8; i++) {
       colorSwitch = !colorSwitch
       for (var j = 0; j < 8; j++) {
-        console.log("colorswitch", colorSwitch)
         // color pattern
         var color = "black"
         if (colorSwitch) {
@@ -98,7 +98,7 @@ class CheckersGame extends React.Component {
       }
     }
 
-    checkers.forEach((checker) => {
+    demoCheckers.forEach((checker) => {
       const checker = <Circle key={checker.index} color={checker.color}
                               x={checker.x * 100} y={checker.y * 100}/>
       grid.push(checker)
