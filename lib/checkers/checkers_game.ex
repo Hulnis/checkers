@@ -80,14 +80,15 @@ defmodule Checkers.Game do
   end
 
   defp move(state, from = %{index: index}, to) do
-     board = state[:board]
-     |> List.replace_at(to, %{from | index: to})
-     |> List.replace_at(index, nil)
-     %{state | board: board, current_player: next_player(state)}
+    from = crown(from)
+    board = state[:board]
+    |> List.replace_at(to, %{from | index: to})
+    |> List.replace_at(index, nil)
+    %{state | board: board, current_player: next_player(state)}
   end
 
   defp jump(state, from = %{index: index}, to) do
-    from = %{from | index: to}
+    from = %{from | index: to} |> crown(to)
     board = state[:board]
     |> List.replace_at(to, from)
     |> List.replace_at(index, nil)
@@ -97,6 +98,10 @@ defmodule Checkers.Game do
     else 
       %{state | board: board, current_player: next_player(state)}
     end
+  end
+
+  defp crown(from, to) do
+    if to in 0..7 or to in 56..63, do: %{from | crowned: true}, else: from
   end
 
   defp next_player(state) do
