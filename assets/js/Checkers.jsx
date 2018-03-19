@@ -14,8 +14,16 @@ class CheckersGame extends React.Component {
     // Setup socket and stuff
     this.channel = props.channel
 
+    const demoCheckers = []
+    demoCheckers.push({
+      color: "red",
+      index: 0,
+      x: 0,
+      y: 1,
+    })
+
     this.state = {
-      checkers: [],
+      checkers: demoCheckers,
       messages: [],
       prevClick: null,
     }
@@ -44,7 +52,7 @@ class CheckersGame extends React.Component {
     return messages.push(message)
   }
 
-  clickCard(clickedCard) {
+  clickChecker(index) {
     const {
       delayOn,
     } = this.state
@@ -52,6 +60,10 @@ class CheckersGame extends React.Component {
       this.channel.push("click", { cardKey: clickedCard.key})
         .receive("ok", this.receiveView.bind(this))
     }
+  }
+
+  clickRect(index) {
+
   }
 
   restartGame() {
@@ -79,16 +91,23 @@ class CheckersGame extends React.Component {
           color = "white"
         }
         colorSwitch = !colorSwitch
-        const square = <Rect key={"index:" + i + ", " + j} x={j * 100} y={i * 100}
-                             width={100} height={100} fill={color} />
+        const square = <Rect key={"index:" + i + ", " + j} x={i * 100} y={j * 100}
+                             width={100} height={100} fill={color}
+                             onClick={()=>this.clickRect(1 + x + (y * 8))}/>
         grid.push(square)
       }
     }
-    grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
-               stroke="black" strokeWidth={20}/>)
+
+    checkers.forEach((checker) => {
+      const checker = <Circle key={checker.index} color={checker.color}
+                              x={checker.x * 100} y={checker.y * 100}/>
+      grid.push(checker)
+    })
+    grid.push(<Rect key="outside" x={0} y={0} width={810} height={810} fillEnabled={false}
+               stroke="black" strokeWidth={10}/>)
     return (
       <div>
-        <Stage width={800} height={800}>
+        <Stage width={810} height={810}>
           <Layer>
             { grid }
           </Layer>
