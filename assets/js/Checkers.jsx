@@ -107,7 +107,7 @@ class CheckersGame extends React.Component {
           color = "white"
         }
         colorSwitch = !colorSwitch
-        index = x + (y * 8)
+        const index = x + (y * 8)
         const square = <Rect key={"index:" + i + ", " + j} x={x * 100} y={y * 100}
                              width={100} height={100} fill={color}
                              onClick={()=>this.clickRect(index)}/>
