@@ -48,16 +48,29 @@ class CheckersGame extends React.Component {
 
   clickChecker(index) {
     const {
-      delayOn,
+      prevClick,
     } = this.state
-    if(!delayOn) {
-      this.channel.push("click", { cardKey: clickedCard.key})
-        .receive("ok", this.receiveView.bind(this))
+    if(prevClick) {
+      console.log("you fail!")
+    } else {
+      this.setState({
+        prevClick: index
+      })
     }
   }
 
   clickRect(index) {
-
+    const {
+      prevClick,
+    } = this.state
+    if(prevClick) {
+      console.log("Index of rect", index)
+      // this.channel.push("click", { cardKey: clickedCard.key})
+      //   .receive("ok", this.receiveView.bind(this))
+    } else {
+      console.log("you fail!")
+    }
+  }
   }
 
   restartGame() {
@@ -78,7 +91,7 @@ class CheckersGame extends React.Component {
       y: 1,
     })
     const grid = []
-    var colorSwitch = false
+    var colorSwitch = true
     // if(checkers.length === 0) {
     //   return <div>Waiting on server</div>
     // } else {
@@ -99,14 +112,16 @@ class CheckersGame extends React.Component {
     }
     console.log("demoCheckers", demoCheckers)
     demoCheckers.forEach((checker) => {
-      grid.push( <Circle key={checker.index} color={checker.color}
-                              x={checker.x * 100} y={checker.y * 100}/>)
+      grid.push( <Circle key={
+        checker.index} fill={checker.color} x={checker.x * 100} y={checker.y * 100}
+        onClick={() => this.clickChecker(index)} />
+
     })
-    grid.push(<Rect key="outside" x={0} y={0} width={810} height={810} fillEnabled={false}
+    grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
                stroke="black" strokeWidth={10}/>)
     return (
       <div>
-        <Stage width={810} height={810}>
+        <Stage width={800} height={800}>
           <Layer>
             { grid }
           </Layer>
