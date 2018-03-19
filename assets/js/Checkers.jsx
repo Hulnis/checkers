@@ -60,45 +60,41 @@ class CheckersGame extends React.Component {
 
   render() {
     const {
-      cards,
-      counter,
+      checkers,
+      messages,
     } = this.state
-    console.log("cards", cards)
-    const cardDraw = []
-    if(cards.length === 0) {
+    const grid = []
+    const switch = false
+    if(checkers.length === 0) {
       return <div>Waiting on server</div>
     } else {
-      for (var i = 0; i < 4; i++) {
-        const row = []
-        for (var j = 0; j < 4; j++) {
-          const card = cards[(i * 4) + j]
-          var color = "white"
-          if (card.state === "solved") {
-            color = "green"
-          } else if (card.state === "revealed") {
-            color = "coral"
+      for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
+          // color pattern
+          const color = "black"
+          if (switch) {
+            switch = false
+            color = "white"
+          } else {
+            switch = true
           }
-          const styles = {
-            backgroundColor: color
-          }
-          const showText = (card.state === "solved" || card.state === "revealed")
-          row.push(
-            <div style={styles} className="card" onClick={() => this.clickCard(card)} key={card.key}>
-              {showText && card.value}
-            </div>
-          )
+
+          const square = <Rect key={"index:" + i + ", " + j} x={i * 100} y={j * 100}
+                               width={100} height={100} fill={color} />
+          grid.push(square)
         }
-        cardDraw.push(<div className="col" key={"col" + i}>{row}</div>)
       }
       return (
         <div>
-          <div className="row">
-            {cardDraw}
-          </div>
+          <<Stage width={800} height={800}>
+            <Layer>
+              { grid }
+            </Layer>
+          </Stage>
           <Button onClick={this.restartGame.bind(this)}>Restart Game</Button>
-          <p>{counter}</p>
         </div>
       )
     }
   }
+
 }
