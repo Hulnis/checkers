@@ -63,10 +63,13 @@ class CheckersGame extends React.Component {
     const {
       prevClick,
     } = this.state
-    if(typeof(prevClick) === "int") {
+    if(typeof(prevClick) === "integer") {
       console.log("Index of rect", index)
       // this.channel.push("click", { cardKey: clickedCard.key})
       //   .receive("ok", this.receiveView.bind(this))
+      this.setState({
+        prevClick: null
+      })
     } else {
       console.log("you fail!")
     }
