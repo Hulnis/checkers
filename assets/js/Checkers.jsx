@@ -65,36 +65,36 @@ class CheckersGame extends React.Component {
     } = this.state
     const grid = []
     var colorSwitch = false
-    if(checkers.length === 0) {
-      return <div>Waiting on server</div>
-    } else {
-      for (var i = 0; i < 8; i++) {
-        for (var j = 0; j < 8; j++) {
-          // color pattern
-          var color = "black"
-          if (colorSwitchcolorSwitch) {
-            colorSwitch = false
-            color = "white"
-          } else {
-            colorSwitch = true
-          }
-
-          const square = <Rect key={"index:" + i + ", " + j} x={i * 100} y={j * 100}
-                               width={100} height={100} fill={color} />
-          grid.push(square)
+    // if(checkers.length === 0) {
+    //   return <div>Waiting on server</div>
+    // } else {
+    for (var i = 0; i < 8; i++) {
+      for (var j = 0; j < 8; j++) {
+        // color pattern
+        var color = "black"
+        if (colorSwitchcolorSwitch) {
+          colorSwitch = false
+          color = "white"
+        } else {
+          colorSwitch = true
         }
+
+        const square = <Rect key={"index:" + i + ", " + j} x={i * 100} y={j * 100}
+                             width={100} height={100} fill={color} />
+        grid.push(square)
       }
-      return (
-        <div>
-          <Stage width={800} height={800}>
-            <Layer>
-              { grid }
-            </Layer>
-          </Stage>
-          <Button onClick={this.restartGame.bind(this)}>Restart Game</Button>
-        </div>
-      )
     }
+    return (
+      <div>
+        <Stage width={800} height={800}>
+          <Layer>
+            { grid }
+          </Layer>
+        </Stage>
+        <Button onClick={this.restartGame.bind(this)}>Restart Game</Button>
+      </div>
+    )
+    // }
   }
 
 }
