@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Button } from 'reactstrap'
+import { Stage, Layer, Rect, Circle } from 'react-konva';
 
 export default function run_checkers_game(root, channel) {
   ReactDOM.render(<CheckersGame channel={channel}/>, root)
