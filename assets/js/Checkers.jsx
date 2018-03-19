@@ -72,7 +72,7 @@ class CheckersGame extends React.Component {
       for (var j = 0; j < 8; j++) {
         // color pattern
         var color = "black"
-        if (colorSwitchcolorSwitch) {
+        if (colorSwitch) {
           colorSwitch = false
           color = "white"
         } else {
