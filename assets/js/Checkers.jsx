@@ -71,7 +71,6 @@ class CheckersGame extends React.Component {
       console.log("you fail!")
     }
   }
-  }
 
   restartGame() {
     this.channel.push("restart")
