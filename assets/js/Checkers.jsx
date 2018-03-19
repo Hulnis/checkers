@@ -66,7 +66,7 @@ class CheckersGame extends React.Component {
     } = this.state
     const grid = []
     var colorSwitch = false
-    var rowSwitch = true
+    var rowSwitch = false
     // if(checkers.length === 0) {
     //   return <div>Waiting on server</div>
     // } else {
