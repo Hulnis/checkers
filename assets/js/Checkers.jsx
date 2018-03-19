@@ -86,7 +86,7 @@ class CheckersGame extends React.Component {
       }
       return (
         <div>
-          <<Stage width={800} height={800}>
+          <Stage width={800} height={800}>
             <Layer>
               { grid }
             </Layer>
