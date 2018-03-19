@@ -85,6 +85,7 @@ class CheckersGame extends React.Component {
         grid.push(square)
       }
     }
+    grid.push(<React x={0} y={0} width={800} height={800} fillEnabled={false} />)
     return (
       <div>
         <Stage width={800} height={800}>
