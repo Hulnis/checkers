@@ -65,26 +65,24 @@ class CheckersGame extends React.Component {
       messages,
     } = this.state
     const grid = []
-    var colorSwitch = true
+    var colorSwitch = false
+    var rowSwitch = true
     // if(checkers.length === 0) {
     //   return <div>Waiting on server</div>
     // } else {
     for (var i = 0; i < 8; i++) {
-      if (colorSwitch) {
-        colorSwitch = false
-      } else {
-        colorSwitch = true
+      if (rowSwitch) {
+        colorSwitch = !colorSwitch
       }
+      rowSwitch = !rowSwitch
       for (var j = 0; j < 8; j++) {
         console.log("colorswitch", colorSwitch)
         // color pattern
         var color = "black"
         if (colorSwitch) {
-          colorSwitch = false
           color = "white"
-        } else {
-          colorSwitch = true
         }
+        colorSwitch = !colorSwitch
         const square = <Rect key={"index:" + i + ", " + j} x={i * 100} y={j * 100}
                              width={100} height={100} fill={color} />
         grid.push(square)
