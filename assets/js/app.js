@@ -25,7 +25,7 @@ function start() {
   let root = document.getElementById('root');
   if (root) {
     console.log("socket connecting")
-    let channel = socket.channel("games:" + window.gameName, {});
+    let channel = socket.channel("game:" + window.gameName, {});
     run_checkers(root, channel);
   }
 

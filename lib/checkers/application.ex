@@ -13,7 +13,7 @@ defmodule Checkers.Application do
       # Start the endpoint when the application starts
       supervisor(CheckersWeb.Endpoint, []),
       # Start your own worker by calling: Checkers.Worker.start_link(arg1, arg2, arg3)
-      # worker(Checkers.Worker, [arg1, arg2, arg3]),
+      worker(Checkers.Backup, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

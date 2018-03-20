@@ -2,7 +2,7 @@ defmodule CheckersWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", CheckersWeb.RoomChannel
+  channel "game:*", CheckersWeb.Channel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

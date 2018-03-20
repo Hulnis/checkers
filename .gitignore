@@ -4,3 +4,6 @@
 erl_crash.dump
 *.ez
 *.beam
+
+/assets/node_module
+/priv/static
