@@ -34,4 +34,10 @@ function start() {
   }
 }
 
+function create_game() {
+    $('#join').click(() => {
+        window.location = '/game/' + $('#text').val();
+    })
+}
+
 $(start);
