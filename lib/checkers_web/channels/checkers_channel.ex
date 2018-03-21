@@ -17,7 +17,7 @@ defmodule CheckersWeb.Channel do
       end
     end
 
-    def handle_in("turn", %{"player": player, "from": from, "to": to}, socket) do
+    def handle_in("turn", %{"player" => player, "from" => from, "to" => to}, socket) do
       game = Game.take_turn(socket.assigns[:game], player, from, to)
       socket = assign(socket, :game, game)
       Checkers.Backup.save(socket.assigns[:name], game)
