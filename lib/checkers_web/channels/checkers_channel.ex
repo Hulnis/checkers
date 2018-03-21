@@ -27,13 +27,13 @@ defmodule CheckersWeb.Channel do
     {:reply, {:ok, %{"game": game}}, socket}
   end
 
-  def handle_in("restart", %{"black": black, "red": red}, socket) do
+  def handle_in("restart", %{}, socket) do
     game = Game.init()
-    |> Game.add_player(black)
-    |> Game.add_player(red)
+    {black, game} = Game.add_player(game)
+    {red, game} = Game.add_player(game)
     socket = assign(socket, :game, game)
     Checkers.Backup.save(socket.assigns[:name], game)
-    {:reply, {:ok, %{"game": game}}, socket}
+    {:reply, {:ok, %{"game": game, "black" => black, "red" => red}}, socket}
   end
 
   defp authorized?(_player) do

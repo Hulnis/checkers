@@ -32,9 +32,9 @@ defmodule Checkers.Game do
       length(Map.keys(state[:players])) >= 2 ->
         {-1, state}
       state[:current_player] == nil ->
-        {id, %{state | current_player: id, players: %{state[:players] | player: :black}}}
+        {id, %{state | current_player: id, players: Map.put(state[:players], id, :black)}}
       true ->
-        {id, %{state | players: %{state[:players] | player: :red}}}
+        {id, %{state | players: Map.put(state[:players], id, :red)}}
     end  
   end
 
