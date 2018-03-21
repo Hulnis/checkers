@@ -3,9 +3,11 @@ defmodule CheckersWeb.Channel do
 
   alias Checkers.Game
 
-  def join("game:" <> name, socket) do
+  def join("game:" <> name, player, socket) do
     IO.puts("name")
     IO.inspect(name)
+    IO.puts("player")
+    IO.inspect(player)
     IO.puts("socket")
     IO.inspect(socket)
 
