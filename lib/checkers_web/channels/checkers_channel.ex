@@ -9,9 +9,9 @@ defmodule CheckersWeb.Channel do
     IO.puts("socket")
     IO.inspect(socket)
 
-    if authorized?(player) do
+    if authorized?("player") do
       game = Checkers.Backup.load(name) || Game.init()
-      |> Game.add_player(player)
+      |> Game.add_player("player")
       socket = socket
       |> assign(:name, name)
       |> assign(:game, game)
