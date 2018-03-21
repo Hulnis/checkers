@@ -51,7 +51,7 @@ class CheckersGame extends React.Component {
       }
     })
     console.log("post loop", checkers)
-    messages = this.receiveMessage(game["message"])
+    messages = this.receiveMessage(game.message)
     this.setState({
       checkers: view.game.checkers,
       messages: messages,
@@ -110,21 +110,18 @@ class CheckersGame extends React.Component {
 
   render() {
     const {
-      // checkers,
+      checkers,
       messages,
     } = this.state
-    const demoCheckers = []
-    demoCheckers.push({
-      color: "red",
-      index: 0,
-      x: 1,
-      y: 1,
-    })
+    // const demoCheckers = []
+    // demoCheckers.push({
+    //   color: "red",
+    //   index: 0,
+    //   x: 1,
+    //   y: 1,
+    // })
     const grid = []
     var colorSwitch = true
-    // if(checkers.length === 0) {
-    //   return <div>Waiting on server</div>
-    // } else {
     for (var x = 0; x < 8; x++) {
       colorSwitch = !colorSwitch
       for (var y = 0; y < 8; y++) {
@@ -141,8 +138,8 @@ class CheckersGame extends React.Component {
         grid.push(square)
       }
     }
-    console.log("demoCheckers", demoCheckers)
-    demoCheckers.forEach((checker) => {
+    console.log("checker", checker)
+    checker.forEach((checker) => {
       grid.push( <Circle key={
         checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
         radius={40} onClick={() => this.clickChecker(checker.index)} />
