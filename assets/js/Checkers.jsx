@@ -53,7 +53,7 @@ class CheckersGame extends React.Component {
     console.log("post loop", checkers)
     const messages = this.receiveMessage(game.message)
     this.setState({
-      checkers: view.game.checkers,
+      checkers: checkers,
       messages: messages,
     })
   }
@@ -138,8 +138,8 @@ class CheckersGame extends React.Component {
         grid.push(square)
       }
     }
-    console.log("checker", checker)
-    checker.forEach((checker) => {
+    console.log("checker", checkers)
+    checkers.forEach((checker) => {
       grid.push( <Circle key={
         checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
         radius={40} onClick={() => this.clickChecker(checker.index)} />
