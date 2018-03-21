@@ -7,6 +7,8 @@ defmodule CheckersWeb.Channel do
     if authorized?(player) do
       game = Checkers.Backup.load(name) || Game.init()
       {id, game} = Game.add_player(game)
+      IO.puts("id")
+      IO.inspect(id)
       if id == -1 do
         {:error, %{"reason" => "game already has two players"}}
       else
