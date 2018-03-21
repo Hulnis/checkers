@@ -13,7 +13,7 @@ defmodule CheckersWeb.Channel do
         socket = socket
         |> assign(:name, name)
         |> assign(:game, game)
-        {:ok, %{"join" => name, "game" => game, "player" => id}, socket}
+        {:ok, %{"join" => name, "game" => game, "player" => Integer.to_string(id)}, socket}
       end
     else
       {:error, %{"reason" => "unauthorized"}}
@@ -21,7 +21,7 @@ defmodule CheckersWeb.Channel do
   end
 
   def handle_in("turn", %{"player": player, "from": from, "to": to}, socket) do
-    game = Game.take_turn(socket.assigns[:game], player, from, to)
+    game = Game.take_turn(socket.assigns[:game], Integer.parse(player), from, to)
     socket = assign(socket, :game, game)
     Checkers.Backup.save(socket.assigns[:name], game)
     {:reply, {:ok, %{"game": game}}, socket}
