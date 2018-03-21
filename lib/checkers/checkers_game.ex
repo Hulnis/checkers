@@ -28,14 +28,14 @@ defmodule Checkers.Game do
   """
   def add_player(state) do
     id = generate_player_id(state)
-    cond do 
+    cond do
       length(Map.keys(state[:players])) >= 2 ->
         {-1, state}
       state[:current_player] == nil ->
         {id, %{state | current_player: id, players: Map.put(state[:players], id, :black)}}
       true ->
         {id, %{state | players: Map.put(state[:players], id, :red)}}
-    end  
+    end
   end
 
   defp generate_player_id(state) do
@@ -58,7 +58,7 @@ defmodule Checkers.Game do
       from[:color] != state[:players][player] or
       Enum.at(state[:board], to) != nil ->
         state
-      to in possible_moves(from) -> 
+      to in possible_moves(from) ->
         move(state, from, to)
       to in possible_jumps(from) ->
         jump(state, from, to)
