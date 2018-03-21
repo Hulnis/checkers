@@ -39,7 +39,7 @@ defmodule Checkers.Game do
   end
 
   defp generate_player_id(state) do
-    id = Enum.random([0..1_000])
+    id = Enum.random(0..1_000)
     if Map.has_key?(state[:players], id) do
       generate_player_id(state)
     else
