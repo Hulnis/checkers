@@ -3,14 +3,12 @@ defmodule CheckersWeb.Channel do
 
   alias Checkers.Game
 
-  def join("game:" <> name, player, socket) do
+  def join("game:" <> name, socket) do
     IO.puts("name")
     IO.inspect(name)
-    IO.puts("player")
-    IO.inspect(player)
     IO.puts("socket")
     IO.inspect(socket)
-    
+
     if authorized?(player) do
       game = Checkers.Backup.load(name) || Game.init()
       |> Game.add_player(player)
