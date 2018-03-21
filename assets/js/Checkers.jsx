@@ -31,8 +31,9 @@ class CheckersGame extends React.Component {
     console.log("game", resp["game"])
     console.log("player_id",  resp["player"])
     const grid = resp["game"]["board"]
-    const player_id = resp["player"]
+    const player_id = resp["player"] || this.state.player_id
     const checkers = []
+
     grid.forEach((grid) => {
       if (grid != null) {
         const {
