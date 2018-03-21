@@ -147,13 +147,14 @@ class CheckersGame extends React.Component {
     })
     grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
                stroke="black" strokeWidth={10}/>)
+    // <div>
+    //   {messages.map((msg) => {
+    //     <Alert color="primary">msg</Alert>
+    //   })}
+    // </div>
     return (
       <div>
-        <div>
-          {messages.map((msg) => {
-            <Alert color="primary">msg</Alert>
-          })}
-        </div>
+
         <Stage width={800} height={800}>
           <Layer>
             { grid }
