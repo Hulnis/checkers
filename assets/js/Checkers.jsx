@@ -51,7 +51,7 @@ class CheckersGame extends React.Component {
       }
     })
     console.log("post loop", checkers)
-    messages = this.receiveMessage(game.message)
+    const messages = this.receiveMessage(game.message)
     this.setState({
       checkers: view.game.checkers,
       messages: messages,
