@@ -11,7 +11,7 @@ defmodule Checkers.Game do
     |> Enum.concat(Enum.map(24..39, fn _ -> nil end))
     |> Enum.concat(Enum.map(40..63, &(init_pieces(&1, :black, -1))))
 
-    %{board: board, current_player: nil, players: %{}}
+    %{board: board, black_loss: 0, red_loss: 0, current_player: nil, players: %{}}
   end
 
   defp init_pieces(index, color, direction) do
@@ -26,15 +26,25 @@ defmodule Checkers.Game do
   @doc """
   Adds a player to the game.
   """
-  def add_player(state, player) do
+  def add_player(state) do
+    id = generate_player_id(state)
     cond do 
       length(Map.keys(state[:players])) >= 2 ->
-        state
+        {-1, state}
       state[:current_player] == nil ->
-        %{state | current_player: player, players: Map.put(state[:players], player, :black)}
+        {id, %{state | current_player: id, players: %{state[:players] | player: :black}}}
       true ->
-        %{state | players: Map.put(state[:players], player, :red)}
+        {id, %{state | players: %{state[:players] | player: :red}}}
     end  
+  end
+
+  defp generate_player_id(state) do
+    id = Enum.random([0..1000])
+    if Map.has_key?(state[:players], id) do
+      generate_player_id(state)
+    else
+      id
+    end
   end
 
   @doc """
@@ -93,10 +103,19 @@ defmodule Checkers.Game do
     |> List.replace_at(to, from)
     |> List.replace_at(index, nil)
     |> List.replace_at(index + (to - index) / 2, nil)
-    if possible_jumps(from) != [] do
-      %{state | board: board}
-    else 
-      %{state | board: board, current_player: next_player(state)}
+    state = %{state | board: board}
+
+    state =
+      if state[:players][state[:current_player]] == :red do
+        %{state | black_loss: state[:black_loss] + 1}
+      else
+        %{state | red_loss: state[:red_loss] + 1}
+      end
+
+    if possible_jumps(from) == [] do
+      %{state | current_player: next_player(state)}
+    else
+      state
     end
   end
 
@@ -109,5 +128,16 @@ defmodule Checkers.Game do
     |> Map.keys
     |> Enum.reject(&(&1 == state[:current_player]))
     |> List.first
-  end 
+  end
+
+  @doc """
+  Returns whether the current player won.
+  """
+  def is_winner?(state) do
+    if state[:players][state[:current_player]] == :red do
+      state[:black_loss] == 12
+    else
+      state[:red_loss] == 12
+    end
+  end
 end

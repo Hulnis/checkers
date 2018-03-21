@@ -4,20 +4,17 @@ defmodule CheckersWeb.Channel do
   alias Checkers.Game
 
   def join("game:" <> name, player, socket) do
-    IO.puts("name")
-    IO.inspect(name)
-    IO.puts("player")
-    IO.inspect(player)
-    IO.puts("socket")
-    IO.inspect(socket)
-
-    if authorized?("player") do
+    if authorized?(player) do
       game = Checkers.Backup.load(name) || Game.init()
-      |> Game.add_player("player")
-      socket = socket
-      |> assign(:name, name)
-      |> assign(:game, game)
-      {:ok, %{"join" => name, "game" => game}, socket}
+      {id, game} = Game.add_player(game)
+      if id == -1 do
+        {:error, %{"reason" => "game already has two players"}}
+      else
+        socket = socket
+        |> assign(:name, name)
+        |> assign(:game, game)
+        {:ok, %{"join" => name, "game" => game, "player" => id}, socket}
+      end
     else
       {:error, %{"reason" => "unauthorized"}}
     end

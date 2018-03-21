@@ -27,10 +27,11 @@ class CheckersGame extends React.Component {
         .receive("error", resp => { console.log("Unable to join", resp) })
   }
 
-  receiveGame(game) {
-    console.log("game", game["game"])
-    console.log("game", game["game"]["board"])
-    const grid = game["game"]["board"]
+  receiveGame(resp) {
+    console.log("game", resp["game"])
+    console.log("game", resp["game"]["board"])
+    const grid = resp["game"]["board"]
+    const player_id = resp["player"]
     const checkers = []
     grid.forEach((grid) => {
       if (grid != null) {
@@ -53,6 +54,7 @@ class CheckersGame extends React.Component {
     this.setState({
       checkers: checkers,
       messages: messages,
+      player_id: player_id,
     })
   }
 
