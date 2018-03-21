@@ -20,7 +20,7 @@ defmodule CheckersWeb.Channel do
     game = Game.take_turn(socket.assigns[:game], player, from, to)
     socket = assign(socket, :game, game)
     Checkers.Backup.save(socket.assigns[:name], game)
-    {:reply, {ok, %{"game": game}}, socket}
+    {:reply, {:ok, %{"game": game}}, socket}
   end
 
   def handle_in("restart", %{"black": black, "red": red}, socket) do
