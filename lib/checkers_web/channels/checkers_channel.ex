@@ -12,6 +12,7 @@ defmodule CheckersWeb.Channel do
         socket = socket
         |> assign(:name, name)
         |> assign(:game, game)
+        Checkers.Backup.save(socket.assigns[:name], game)
         {:ok, %{"join" => name, "game" => game, "player" => id}, socket}
       end
     end
