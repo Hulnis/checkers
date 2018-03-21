@@ -33,9 +33,7 @@ class CheckersGame extends React.Component {
     const grid = game["game"]["board"]
     const checkers = []
     grid.forEach((grid) => {
-      console.log("grid", grid)
       if (grid != null) {
-        console.log("in if")
         const {
           color,
           index,
@@ -126,7 +124,7 @@ class CheckersGame extends React.Component {
       colorSwitch = !colorSwitch
       for (var y = 0; y < 8; y++) {
         // color pattern
-        var color = "black"
+        var color = "brown"
         if (colorSwitch) {
           color = "white"
         }
