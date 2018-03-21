@@ -86,15 +86,14 @@ class CheckersGame extends React.Component {
       player,
       prevClick,
     } = this.state
-    console.log("type", typeof(prevClick))
+
     if(typeof(prevClick) === "number") {
       console.log("Index of rect", index)
       this.channel.push("turn", {
         player: player,
         from: prevClick,
         to: index,
-      })
-        .receive("ok", this.receiveGame.bind(this))
+      }).receive("ok", this.receiveGame.bind(this))
       this.setState({
         prevClick: null
       })
