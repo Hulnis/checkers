@@ -39,7 +39,7 @@ defmodule Checkers.Game do
   end
 
   defp generate_player_id(state) do
-    id = random_number = :rand.uniform(1000)
+    id = :rand.uniform(1000)
     if Map.has_key?(state[:players], id) do
       generate_player_id(state)
     else
