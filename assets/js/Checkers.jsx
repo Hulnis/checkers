@@ -30,7 +30,28 @@ class CheckersGame extends React.Component {
   receiveGame(game) {
     console.log("game", game["game"])
     console.log("game", game["game"]["board"])
-    messages = this.receiveMessage(view.game.message)
+    const grid = game["game"]["board"]
+    const checkers = []
+    grid.forEach((grid) => {
+      console.log("grid", grid)
+      if (grid != null) {
+        console.log("in if")
+        const {
+          color,
+          index,
+        } = grid
+        const x = index % 8
+        const y = (index - x) / 8
+        checkers.push({
+          color: color,
+          index: index,
+          x: x,
+          y: y,
+        })
+      }
+    })
+    console.log("post loop", checkers)
+    messages = this.receiveMessage(game["message"])
     this.setState({
       checkers: view.game.checkers,
       messages: messages,
