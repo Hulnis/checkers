@@ -30,7 +30,7 @@ function start() {
   }
 
   if (document.getElementById('index-page')) {
-    form_init();
+    create_game();
   }
 }
 
