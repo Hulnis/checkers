@@ -43,7 +43,7 @@ defmodule Checkers.Game do
     if Map.has_key?(state[:players], id) do
       generate_player_id(state)
     else
-      id
+      Integer.to_string(id)
     end
   end
 
