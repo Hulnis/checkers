@@ -33,7 +33,7 @@ defmodule CheckersWeb.Channel do
     {red, game} = Game.add_player(game)
     socket = assign(socket, :game, game)
     Checkers.Backup.save(socket.assigns[:name], game)
-    {:reply, {:ok, %{"game": game, "black" => black, "red" => red}}, socket}
+    {:reply, {:ok, %{"game" => game, "black" => black, "red" => red}}, socket}
   end
 
   defp authorized?(_player) do
