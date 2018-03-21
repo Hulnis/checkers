@@ -124,7 +124,7 @@ class CheckersGame extends React.Component {
       colorSwitch = !colorSwitch
       for (var y = 0; y < 8; y++) {
         // color pattern
-        var color = "brown"
+        var color = "#8B4513"
         if (colorSwitch) {
           color = "white"
         }
