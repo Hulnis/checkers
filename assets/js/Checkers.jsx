@@ -29,7 +29,7 @@ class CheckersGame extends React.Component {
 
   receiveGame(resp) {
     console.log("game", resp["game"])
-    console.log("game", resp["game"]["board"])
+    console.log("player_id",  resp["player"])
     const grid = resp["game"]["board"]
     const player_id = resp["player"]
     const checkers = []
