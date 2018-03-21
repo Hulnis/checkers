@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Button } from 'reactstrap'
+import { Alert, Button } from 'reactstrap'
 import { Stage, Layer, Rect, Circle } from 'react-konva';
 
 export default function run_checkers_game(root, channel) {
@@ -61,13 +61,18 @@ class CheckersGame extends React.Component {
 
   clickRect(index) {
     const {
+      player,
       prevClick,
     } = this.state
     console.log("type", typeof(prevClick))
     if(typeof(prevClick) === "number") {
       console.log("Index of rect", index)
-      // this.channel.push("click", { cardKey: clickedCard.key})
-      //   .receive("ok", this.receiveView.bind(this))
+      this.channel.push("turn", {
+        player: player
+        from: prevClick
+        to: index
+      })
+        .receive("ok", this.receiveView.bind(this))
       this.setState({
         prevClick: null
       })
@@ -125,6 +130,11 @@ class CheckersGame extends React.Component {
                stroke="black" strokeWidth={10}/>)
     return (
       <div>
+        <div>
+          {messages.map((msg) => {
+            <Alert color="primary">msg</Alert>
+          })}
+        </div>
         <Stage width={800} height={800}>
           <Layer>
             { grid }

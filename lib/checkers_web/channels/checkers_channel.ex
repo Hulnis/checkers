@@ -35,4 +35,4 @@ defmodule CheckersWeb.Channel do
   defp authorized?(_player) do
     return true
   end
-end 
+end
