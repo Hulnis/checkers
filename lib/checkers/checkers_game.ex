@@ -39,7 +39,7 @@ defmodule Checkers.Game do
   end
 
   defp generate_player_id(state) do
-    id = Enum.random([0..1000])
+    id = random_number = :rand.uniform(1000)
     if Map.has_key?(state[:players], id) do
       generate_player_id(state)
     else
@@ -51,7 +51,7 @@ defmodule Checkers.Game do
   Moves the selected piece for the given player.
   """
   def take_turn(state, player, index, to) do
-    from = Enum.at(state[:board], index) 
+    from = Enum.at(state[:board], index)
     cond do
       player != state[:current_player] or
       from == nil or
