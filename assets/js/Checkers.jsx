@@ -21,19 +21,28 @@ class CheckersGame extends React.Component {
     }
 
     this.channel.join()
-        .receive("ok", this.receiveGame.bind(this))
+        .receive("ok", this.receiveJoin.bind(this))
         .receive("error", resp => { console.log("Unable to join", resp) })
 
     this.channel.on("update", (resp) => {
+      this.receiveGame(resp["game"])
       console.log("update message", resp)
     })
   }
 
-  receiveGame(resp) {
+  receiveJoin(resp) {
     console.log("game", resp["game"])
     console.log("player_id",  resp["player"])
-    const grid = resp["game"]["board"]
     const player_id = resp["player"] || this.state.player_id
+
+    this.setState({
+      player_id: player_id
+    })
+    this.receiveGame(resp["game"])
+  }
+
+  receiveGame(game) {
+    const grid = game["board"]
     const checkers = []
 
     grid.forEach((grid) => {
@@ -52,12 +61,10 @@ class CheckersGame extends React.Component {
         })
       }
     })
-    console.log("post loop", checkers)
     const messages = []//this.receiveMessage(game.message)
     this.setState({
       checkers: checkers,
       messages: messages,
-      player_id: player_id,
     })
   }
 
