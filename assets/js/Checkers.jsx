@@ -14,8 +14,6 @@ class CheckersGame extends React.Component {
     // Setup socket and stuff
     this.channel = props.channel
 
-
-
     this.state = {
       checkers: [],
       messages: [],
@@ -25,6 +23,10 @@ class CheckersGame extends React.Component {
     this.channel.join()
         .receive("ok", this.receiveGame.bind(this))
         .receive("error", resp => { console.log("Unable to join", resp) })
+
+    this.channel.on("update", (resp) => {
+      console.log(resp)
+    })
   }
 
   receiveGame(resp) {

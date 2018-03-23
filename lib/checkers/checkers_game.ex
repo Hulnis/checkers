@@ -7,20 +7,24 @@ defmodule Checkers.Game do
   Initializes the state for a new checkers game.
   """
   def init() do
-    board = Enum.map(0..23, &(init_pieces(&1, :red, 1)))
+    board = List.flatten(Enum.map([0, 8, 16], &(init_row(&1, :red))))
     |> Enum.concat(Enum.map(24..39, fn _ -> nil end))
-    |> Enum.concat(Enum.map(40..63, &(init_pieces(&1, :black, -1))))
+    |> Enum.concat(List.flatten(Enum.map([40, 48, 56], &(init_row(&1, :black)))))
 
     %{board: board, black_loss: 0, red_loss: 0, current_player: nil, players: %{}}
   end
 
-  defp init_pieces(index, color, direction) do
-    mod = if color == :red, do: 0, else: 1
-    if rem(index, 2) == mod do
-      %{index: index, color: color, direction: direction, crowned: false}
-    else
-      nil
-    end
+  defp init_row(first, color) do
+    offset = rem(div(first, 8), 2)
+    row = Enum.map(0..3, &(first + offset + &1 * 2))
+    |> Enum.map(&(init_piece(&1, color)))
+    |> Enum.intersperse(nil)
+    if offset == 0, do: row ++ [nil], else: [nil] ++ row
+  end
+
+  defp init_piece(index, color) do
+    direction = if color == :red, do: 1, else: -1
+    %{index: index, color: color, direction: direction, crowned: false}
   end
 
   @doc """
@@ -39,7 +43,7 @@ defmodule Checkers.Game do
   end
 
   defp generate_player_id(state) do
-    id = Enum.random(0..1_000)
+    id = Enum.random(0..1000)
     if Map.has_key?(state[:players], id) do
       generate_player_id(state)
     else
@@ -54,6 +58,7 @@ defmodule Checkers.Game do
     from = Enum.at(state[:board], index)
     cond do
       player != state[:current_player] or
+      length(state[:players]) != 2 or
       from == nil or
       from[:color] != state[:players][player] or
       Enum.at(state[:board], to) != nil ->
