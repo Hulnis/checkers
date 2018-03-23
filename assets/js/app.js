@@ -30,8 +30,14 @@ function start() {
   }
 
   if (document.getElementById('index-page')) {
-    form_init();
+    create_game();
   }
+}
+
+function create_game() {
+    $('#join').click(() => {
+        window.location = '/game/' + $('#text').val();
+    })
 }
 
 $(start);

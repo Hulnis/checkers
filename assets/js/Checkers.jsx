@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Button } from 'reactstrap'
+import { Alert, Button } from 'reactstrap'
 import { Stage, Layer, Rect, Circle } from 'react-konva';
 
 export default function run_checkers_game(root, channel) {
@@ -14,8 +14,6 @@ class CheckersGame extends React.Component {
     // Setup socket and stuff
     this.channel = props.channel
 
-
-
     this.state = {
       checkers: [],
       messages: [],
@@ -23,20 +21,56 @@ class CheckersGame extends React.Component {
     }
 
     this.channel.join()
-        .receive("ok", this.receiveView.bind(this))
+        .receive("ok", this.receiveMessage.bind(this))
         .receive("error", resp => { console.log("Unable to join", resp) })
+
+    this.channel.on("update", (resp) => {
+      console.log("update message", resp["game"])
+      this.receiveGame(resp["game"])
+    })
   }
 
-  receiveView(view) {
-    console.log("view", view)
-    messages = this.receiveMessage(view.game.message)
+  receiveMessage(resp) {
+    console.log("game", resp["game"])
+    console.log("player_id",  resp["player"])
+    const player_id = resp["player"] || this.state.player_id
+
     this.setState({
-      checkers: view.game.checkers,
+      player_id: player_id
+    })
+    this.receiveGame(resp["game"])
+  }
+
+  receiveGame(game) {
+    console.log("game receive", game)
+    console.log("game receive board", game.board)
+    const grid = game["board"]
+    const checkers = []
+
+    grid.forEach((grid) => {
+      if (grid != null) {
+        const {
+          color,
+          index,
+        } = grid
+        const x = index % 8
+        const y = (index - x) / 8
+        checkers.push({
+          color: color,
+          index: index,
+          x: x,
+          y: y,
+        })
+      }
+    })
+    const messages = []//this.receiveMessage(game.message)
+    this.setState({
+      checkers: checkers,
       messages: messages,
     })
   }
 
-  receiveMessage(message) {
+  receiveUserMessage(message) {
     const {
       messages
     } = this.state
@@ -61,13 +95,17 @@ class CheckersGame extends React.Component {
 
   clickRect(index) {
     const {
+      player_id,
       prevClick,
     } = this.state
-    console.log("type", typeof(prevClick))
+
     if(typeof(prevClick) === "number") {
       console.log("Index of rect", index)
-      // this.channel.push("click", { cardKey: clickedCard.key})
-      //   .receive("ok", this.receiveView.bind(this))
+      this.channel.push("turn", {
+        player: player_id,
+        from: prevClick,
+        to: index,
+      }).receive("ok", this.receiveMessage.bind(this))
       this.setState({
         prevClick: null
       })
@@ -78,31 +116,28 @@ class CheckersGame extends React.Component {
 
   restartGame() {
     this.channel.push("restart")
-      .receive("ok", this.receiveView.bind(this))
+      .receive("ok", this.receiveMessage.bind(this))
   }
 
   render() {
     const {
-      // checkers,
+      checkers,
       messages,
     } = this.state
-    const demoCheckers = []
-    demoCheckers.push({
-      color: "red",
-      index: 0,
-      x: 1,
-      y: 1,
-    })
+    // const demoCheckers = []
+    // demoCheckers.push({
+    //   color: "red",
+    //   index: 0,
+    //   x: 1,
+    //   y: 1,
+    // })
     const grid = []
     var colorSwitch = true
-    // if(checkers.length === 0) {
-    //   return <div>Waiting on server</div>
-    // } else {
     for (var x = 0; x < 8; x++) {
       colorSwitch = !colorSwitch
       for (var y = 0; y < 8; y++) {
         // color pattern
-        var color = "black"
+        var color = "#8B4513"
         if (colorSwitch) {
           color = "white"
         }
@@ -114,8 +149,8 @@ class CheckersGame extends React.Component {
         grid.push(square)
       }
     }
-    console.log("demoCheckers", demoCheckers)
-    demoCheckers.forEach((checker) => {
+    console.log("checker", checkers)
+    checkers.forEach((checker) => {
       grid.push( <Circle key={
         checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
         radius={40} onClick={() => this.clickChecker(checker.index)} />
@@ -123,8 +158,14 @@ class CheckersGame extends React.Component {
     })
     grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
                stroke="black" strokeWidth={10}/>)
+    // <div>
+    //   {messages.map((msg) => {
+    //     <Alert color="primary">msg</Alert>
+    //   })}
+    // </div>
     return (
       <div>
+
         <Stage width={800} height={800}>
           <Layer>
             { grid }
