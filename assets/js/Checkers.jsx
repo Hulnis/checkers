@@ -25,7 +25,7 @@ class CheckersGame extends React.Component {
         .receive("error", resp => { console.log("Unable to join", resp) })
 
     this.channel.on("update", (resp) => {
-      console.log(resp)
+      console.log("update message", resp)
     })
   }
 
