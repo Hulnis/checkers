@@ -21,7 +21,7 @@ class CheckersGame extends React.Component {
     }
 
     this.channel.join()
-        .receive("ok", this.receiveJoin.bind(this))
+        .receive("ok", this.receiveMessage.bind(this))
         .receive("error", resp => { console.log("Unable to join", resp) })
 
     this.channel.on("update", (resp) => {
@@ -30,7 +30,7 @@ class CheckersGame extends React.Component {
     })
   }
 
-  receiveJoin(resp) {
+  receiveMessage(resp) {
     console.log("game", resp["game"])
     console.log("player_id",  resp["player"])
     const player_id = resp["player"] || this.state.player_id
@@ -70,7 +70,7 @@ class CheckersGame extends React.Component {
     })
   }
 
-  receiveMessage(message) {
+  receiveUserMessage(message) {
     const {
       messages
     } = this.state
@@ -105,7 +105,7 @@ class CheckersGame extends React.Component {
         player: player_id,
         from: prevClick,
         to: index,
-      }).receive("ok", this.receiveGame.bind(this))
+      }).receive("ok", this.receiveMessage.bind(this))
       this.setState({
         prevClick: null
       })
@@ -116,7 +116,7 @@ class CheckersGame extends React.Component {
 
   restartGame() {
     this.channel.push("restart")
-      .receive("ok", this.receiveGame.bind(this))
+      .receive("ok", this.receiveMessage.bind(this))
   }
 
   render() {
