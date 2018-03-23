@@ -58,6 +58,7 @@ defmodule Checkers.Game do
     from = Enum.at(state[:board], index) 
     cond do
       player != state[:current_player] or
+      length(state[:players]) != 2 or
       from == nil or
       from[:color] != state[:players][player] or
       Enum.at(state[:board], to) != nil ->
