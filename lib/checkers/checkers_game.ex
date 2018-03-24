@@ -62,6 +62,7 @@ defmodule Checkers.Game do
       from == nil or
       from[:color] != state[:players][player] or
       Enum.at(state[:board], to) != nil ->
+        IO.inspect state, limit: :infinity
         state
       to in possible_moves(from) ->
         move(state, from, to)
@@ -91,7 +92,7 @@ defmodule Checkers.Game do
   defp possible_squares(index, row, direction) do
     Enum.map([index - row, index + row], &(&1 + 8 * row * direction))
     |> Enum.reject(&(&1 < 0 or &1 > 63))
-    |> Enum.filter(&(rem(&1, 8) == rem(index, 8) + row * direction))
+    |> Enum.filter(&(div(&1, 8) == div(index, 8) + row * direction))
   end
 
   defp move(state, from = %{index: index}, to) do
@@ -107,7 +108,7 @@ defmodule Checkers.Game do
     board = state[:board]
     |> List.replace_at(to, from)
     |> List.replace_at(index, nil)
-    |> List.replace_at(index + (to - index) / 2, nil)
+    |> List.replace_at(index + div(to - index, 2), nil)
     state = %{state | board: board}
 
     state =
@@ -117,7 +118,7 @@ defmodule Checkers.Game do
         %{state | red_loss: state[:red_loss] + 1}
       end
 
-    if possible_jumps(from) == [] do
+    if Enum.all?(possible_jumps(from), &(Enum.at(state[:board], &1) != nil)) do
       %{state | current_player: next_player(state)}
     else
       state

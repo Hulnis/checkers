@@ -3,6 +3,8 @@ defmodule CheckersWeb.Channel do
 
   alias Checkers.Game
 
+  intercept(["update"])
+
   def join("game:" <> name, _params, socket) do
       game = Checkers.Backup.load(name) || Game.init()
       {id, game} = Game.add_player(game)
@@ -13,8 +15,20 @@ defmodule CheckersWeb.Channel do
         |> assign(:name, name)
         |> assign(:game, game)
         Checkers.Backup.save(socket.assigns[:name], game)
+        send(self(), :after_join)
         {:ok, %{"join" => name, "game" => game, "player" => id}, socket}
       end
+    end
+
+    def handle_info(:after_join, socket) do
+      broadcast(socket, "update", %{"game" => socket.assigns[:game]})
+      {:noreply, socket}
+    end
+
+    def handle_out("update", update = %{"game" => game}, socket) do
+      socket = assign(socket, :game, game)
+      push(socket, "update", update)
+      {:noreply, socket}
     end
 
     def handle_in("turn", %{"player" => player, "from" => from, "to" => to}, socket) do
@@ -31,6 +45,7 @@ defmodule CheckersWeb.Channel do
       {red, game} = Game.add_player(game)
       socket = assign(socket, :game, game)
       Checkers.Backup.save(socket.assigns[:name], game)
+      broadcast(socket, "update", %{"game" => game})
       {:reply, {:ok, %{"game" => game, "black" => black, "red" => red}}, socket}
     end
 end
