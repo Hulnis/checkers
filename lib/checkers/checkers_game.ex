@@ -62,7 +62,6 @@ defmodule Checkers.Game do
       from == nil or
       from[:color] != state[:players][player] or
       Enum.at(state[:board], to) != nil ->
-        IO.inspect state, limit: :infinity
         state
       to in possible_moves(from) ->
         move(state, from, to)
