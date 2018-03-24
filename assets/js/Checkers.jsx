@@ -29,6 +29,10 @@ class CheckersGame extends React.Component {
       console.log("update message", resp["game"])
       this.receiveGame(resp["game"])
     })
+
+    this.channel.on("restart", (resp) => {
+        this.receiveMessage(resp)
+    })
   }
 
   componentDidMount() {

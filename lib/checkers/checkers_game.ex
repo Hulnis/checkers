@@ -64,19 +64,13 @@ defmodule Checkers.Game do
       from[:color] != state[:players][player] or
       Enum.at(state[:board], to) != nil or
       state[:current_piece] != nil and state[:current_piece] != from[:index] ->
-        IO.puts "SAME STATE -----------------"
         state
       to in possible_moves(from) and state[:current_piece] == nil ->
-        state = move(state, from, to)
-        IO.inspect state, limit: :infinity
-        state
+        move(state, from, to)
       to in possible_jumps(from) and 
       (state[:current_piece] == nil or state[:current_piece] == from[:index]) ->
-        state = jump(state, from, to)
-        IO.inspect state, limit: :infinity
-        state
+        jump(state, from, to)
       true ->
-        IO.puts "SAME STATE ------------------"
         state
    end
   end
