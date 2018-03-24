@@ -31,9 +31,9 @@ class CheckersGame extends React.Component {
     })
   }
 
-  componenetDidMount() {
+  componentDidMount() {
     const imageObj = new Image()
-    imageObj.src = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg"
+    imageObj.src = "/assets/static/images/crown.png"
     imageObj.onload = () => {
       this.setState({
         crownImage: imageObj
