@@ -32,7 +32,7 @@ class CheckersGame extends React.Component {
   }
 
   componenetDidMount() {
-    var imageObj = new window.Image()
+    const imageObj = new Image()
     imageObj.src = "/assets/static/images/crown.png"
     imageObj.onload = () => {
       this.setState({
