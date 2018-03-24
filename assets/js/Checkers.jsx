@@ -173,7 +173,7 @@ class CheckersGame extends React.Component {
 
         grid.push(
           <Image image={crownImage} key={"crown" + checker.index}
-                 x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
+                 x={(checker.x * 100)} y={(checker.y * 100)}
                  width={50} height={50} />
         )
       }
