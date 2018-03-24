@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Alert, Button } from 'reactstrap'
-import { Stage, Layer, Rect, Circle } from 'react-konva';
+import { Circle, Image, Layer, Rect, Stage } from 'react-konva';
 
 export default function run_checkers_game(root, channel) {
   ReactDOM.render(<CheckersGame channel={channel}/>, root)
@@ -51,6 +51,7 @@ class CheckersGame extends React.Component {
       if (grid != null) {
         const {
           color,
+          crowned,
           index,
         } = grid
         const x = index % 8
@@ -60,6 +61,7 @@ class CheckersGame extends React.Component {
           index: index,
           x: x,
           y: y,
+          crowned: crowned
         })
       }
     })
@@ -155,6 +157,13 @@ class CheckersGame extends React.Component {
         checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
         radius={40} onClick={() => this.clickChecker(checker.index)} />
       )
+      if(checker.crowned) {
+        grid.push(
+          <Image src={"../static/images/Simple_gold_crown.svg"}
+                 x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
+                 width={50} height={50} />
+        )
+      }
     })
     grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
                stroke="black" strokeWidth={10}/>)
