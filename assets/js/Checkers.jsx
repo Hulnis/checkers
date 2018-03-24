@@ -16,6 +16,7 @@ class CheckersGame extends React.Component {
 
     this.state = {
       checkers: [],
+      crownImage: null,
       messages: [],
       prevClick: null,
     }
@@ -33,7 +34,7 @@ class CheckersGame extends React.Component {
   componenetDidMount() {
     var imageObj = new window.Image()
     imageObj.src = "/assets/static/images/crown.png"
-    imageObj.onload = function() {
+    imageObj.onload = () => {
       this.setState({
         crownImage: imageObj
       })
