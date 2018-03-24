@@ -30,6 +30,16 @@ class CheckersGame extends React.Component {
     })
   }
 
+  componenetDidMount() {
+    var imageObj = new window.Image()
+    imageObj.src = "/assets/static/images/crown.png"
+    imageObj.onload = function() {
+      this.setState({
+        crownImage: imageObj
+      })
+    }
+  }
+
   receiveMessage(resp) {
     console.log("game", resp["game"])
     console.log("player_id",  resp["player"])
@@ -124,6 +134,7 @@ class CheckersGame extends React.Component {
   render() {
     const {
       checkers,
+      crownImage,
       messages,
     } = this.state
     // const demoCheckers = []
@@ -157,8 +168,9 @@ class CheckersGame extends React.Component {
         radius={40} onClick={() => this.clickChecker(checker.index)} />
       )
       if(checker.crowned) {
+
         grid.push(
-          <Image image={{ src: "/assets/static/images/crown.png" }} key={"crown" + checker.index}
+          <Image image={crownImage} key={"crown" + checker.index}
                  x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
                  width={50} height={50} />
         )
