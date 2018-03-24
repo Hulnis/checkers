@@ -158,7 +158,7 @@ class CheckersGame extends React.Component {
       )
       if(checker.crowned) {
         grid.push(
-          <Image key={"crown" + checker.index} src={"/assets/static/images/crown.png"}
+          <Image image={{ src: "/assets/static/images/crown.png" }} key={"crown" + checker.index}
                  x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
                  width={50} height={50} />
         )
