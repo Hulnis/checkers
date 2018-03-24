@@ -153,13 +153,12 @@ class CheckersGame extends React.Component {
     }
     console.log("checker", checkers)
     checkers.forEach((checker) => {
-      grid.push( <Circle key={
-        checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
+      grid.push( <Circle key={checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
         radius={40} onClick={() => this.clickChecker(checker.index)} />
       )
       if(checker.crowned) {
         grid.push(
-          <Image src={"/assets/static/images/Simple_gold_crown.svg"}
+          <Image key={"crown" + checker.index} src={"/assets/static/images/crown.png"}
                  x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
                  width={50} height={50} />
         )
