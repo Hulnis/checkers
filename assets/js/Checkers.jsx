@@ -34,6 +34,7 @@ class CheckersGame extends React.Component {
   componentDidMount() {
     const imageObj = new Image()
     imageObj.src = "/assets/static/images/crown.png"
+    console.log("image", imageObj)
     imageObj.onload = () => {
       this.setState({
         crownImage: imageObj
