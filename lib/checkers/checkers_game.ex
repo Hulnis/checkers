@@ -72,23 +72,23 @@ defmodule Checkers.Game do
    end
   end
 
-  defp possible_moves(from = %{direction: 0}) do
-    possible_moves(%{from | direction: 1}) ++ possible_moves(%{from | direction: -1})
+  defp possible_moves(%{index: index, crowned: true, direction: direction}) do
+    possible_squares(index, 1, direction) ++ possible_squares(index, 1, -direction)
   end
 
   defp possible_moves(%{index: index, direction: direction}) do
     possible_squares(index, 1, direction)
   end
 
-  defp possible_jumps(from = %{direction: 0}) do
-    possible_jumps(%{from | direction: 1}) ++ possible_jumps(%{from | direction: -1})
+  defp possible_jumps(%{index: index, crowned: true, direction: direction}) do
+    possible_squares(index, 2, direction) ++ possible_squares(index, 2, -direction)
   end
 
   defp possible_jumps(%{index: index, direction: direction}) do
     possible_squares(index, 2, direction)
   end
 
-  defp possible_squares(index, row, direction) do
+  defp possible_squares(index, row, direction) do 
     Enum.map([index - row, index + row], &(&1 + 8 * row * direction))
     |> Enum.reject(&(&1 < 0 or &1 > 63))
     |> Enum.filter(&(div(&1, 8) == div(index, 8) + row * direction))
