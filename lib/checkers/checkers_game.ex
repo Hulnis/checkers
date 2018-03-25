@@ -154,10 +154,10 @@ defmodule Checkers.Game do
   end
 
   @doc """
-  Returns whether the current player won.
+  Returns whether the given player won.
   """
-  def is_winner?(state) do
-    if state[:players][state[:current_player]] == :red do
+  def is_winner?(state, player) do
+    if state[:players][player] == :red do
       state[:black_loss] == 12
     else
       state[:red_loss] == 12

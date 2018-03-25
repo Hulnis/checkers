@@ -11,9 +11,9 @@ defmodule CheckersWeb.Channel do
       if id == -1 do
         {:error, %{"reason" => "game already has two players"}}
       else
-        socket = socket
-        |> assign(:name, name)
+        socket = assign(socket, :name, name)
         |> assign(:game, game)
+        |> assign(:player, id)
         Checkers.Backup.save(socket.assigns[:name], game)
         send(self(), :after_join)
         {:ok, %{"join" => name, "game" => game, "player" => id}, socket}
@@ -34,26 +34,36 @@ defmodule CheckersWeb.Channel do
     def handle_out("restart", %{"game" => game}, socket) do
       {id, game} = Game.add_player(game)
       socket = assign(socket, :game, game)
+      |> assign(:player, id)
       Checkers.Backup.save(socket.assigns[:name], game)
       push(socket, "restart", %{"game" => game, "player" => id})
       broadcast_from(socket, "update", %{"game" => game})
       {:noreply, socket}
     end
 
-    def handle_in("turn", %{"player" => player, "from" => from, "to" => to}, socket) do
+    def handle_in("turn", %{"from" => from, "to" => to}, socket) do
+      player = socket.assigns[:player]
       game = Game.take_turn(socket.assigns[:game], player, from, to)
-      socket = assign(socket, :game, game)
       Checkers.Backup.save(socket.assigns[:name], game)
-      broadcast_from(socket, "update", %{"game" => game})
-      {:reply, {:ok, %{"game" => game}}, socket}
+      broadcast(socket, "update", %{"game" => game})
+      if Game.is_winner?(game, player) do
+        push(socket, "winner", %{})
+        broadcast_from(socket, "loser", %{})
+      end
+      {:noreply, socket}
     end
 
     def handle_in("restart", %{}, socket) do
       {id, game} = Game.init()
       |> Game.add_player()
       socket = assign(socket, :game, game)
+      |> assign(:player, id)
       Checkers.Backup.save(socket.assigns[:name], game)
       broadcast_from(socket, "restart", %{"game" => game})
       {:reply, {:ok, %{"game" => game, "player" => id}}, socket}
+    end
+
+    def handle_in("disconnect", %{}, socket) do
+      broadcast_from(socket, "winner", %{})
     end
 end
