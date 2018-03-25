@@ -26,6 +26,11 @@ function start() {
   if (root) {
     console.log("socket connecting")
     let channel = socket.channel("game:" + window.gameName, {});
+
+    window.addEventListener("beforeunload", ev => {
+        channel.push("disconnect")
+    })
+
     run_checkers(root, channel);
   }
 

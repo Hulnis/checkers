@@ -65,5 +65,6 @@ defmodule CheckersWeb.Channel do
 
     def handle_in("disconnect", %{}, socket) do
       broadcast_from(socket, "winner", %{})
+      {:noreply, socket}
     end
 end
