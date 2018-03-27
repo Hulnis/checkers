@@ -43,9 +43,9 @@ defmodule CheckersWeb.Channel do
 
     def handle_in("turn", %{"from" => from, "to" => to}, socket) do
       player = socket.assigns[:player]
-      game = Game.take_turn(socket.assigns[:game], player, from, to)
+      {message, game} = Game.take_turn(socket.assigns[:game], player, from, to)
       Checkers.Backup.save(socket.assigns[:name], game)
-      broadcast(socket, "update", %{"game" => game})
+      broadcast(socket, "update", %{"game" => game, "message" => message})
       if Game.is_winner?(game, player) do
         push(socket, "winner", %{})
         broadcast_from(socket, "loser", %{})

@@ -58,20 +58,25 @@ defmodule Checkers.Game do
   def take_turn(state, player, index, to) do
     from = Enum.at(state[:board], index)
     cond do
-      player != state[:current_player] or
-      length(Map.keys(state[:players])) != 2 or
-      from == nil or
-      from[:color] != state[:players][player] or
-      Enum.at(state[:board], to) != nil or
+      player != state[:current_player] ->
+        {"It's not your turn!", state}
+      length(Map.keys(state[:players])) != 2 ->
+        {"Still waiting for player 2...", state}
+      from == nil ->
+        {"No piece was selected.", state}
+      from[:color] != state[:players][player] ->
+        {"You can't move your opponent's piece!", state}
+      Enum.at(state[:board], to) != nil ->
+        {"That space is already occupied!", state}
       state[:current_piece] != nil and state[:current_piece] != from[:index] ->
-        state
+        {"You must move the same piece you previously moved.", state}
       to in possible_moves(from) and state[:current_piece] == nil ->
-        move(state, from, to)
+        {nil, move(state, from, to)}
       to in possible_jumps(from) and 
       (state[:current_piece] == nil or state[:current_piece] == from[:index]) ->
-        jump(state, from, to)
+        {nil, jump(state, from, to)}
       true ->
-        state
+        {"Invalid move or jump.", state}
    end
   end
 
