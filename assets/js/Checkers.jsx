@@ -96,13 +96,16 @@ class CheckersGame extends React.Component {
     const {
       messages
     } = this.state
-    if (messages.length >= 3) {
-      messages.slice()
+    console.log("adding message -----", message)
+    if (message != null) {
+      if (messages.length >= 3) {
+        messages.slice()
+      }
+      messages.push(message)
+      this.setState({
+        messages: messages
+      })
     }
-    messages.push(message)
-    this.setState({
-      messages: messages
-    })
   }
 
   clickChecker(index) {
