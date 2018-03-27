@@ -195,6 +195,7 @@ class CheckersGame extends React.Component {
     return (
       <div>
         <div>
+          <Alert color='primary'>Help</Alert>
           {msgs}
         </div>
         <Stage width={800} height={800}>
