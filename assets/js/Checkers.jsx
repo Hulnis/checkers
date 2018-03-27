@@ -93,7 +93,7 @@ class CheckersGame extends React.Component {
   }
 
   receiveUserMessage(message) {
-    const {
+    var {
       messages
     } = this.state
     console.log("adding message -----", message)
