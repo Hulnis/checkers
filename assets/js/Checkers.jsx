@@ -188,17 +188,13 @@ class CheckersGame extends React.Component {
                stroke="black" strokeWidth={10}/>)
 
     const msgs = messages.map((msg) => {
-      return <Alert color="primary" key="msg">{msg}</Alert>
+      return <Alert color="primary" key={msg}>{msg}</Alert>
     })
-    msgs.push(
-      <Alert color="primary">{messages[0]}</Alert>
-    )
     console.log("drawing messages", msgs)
 
     return (
       <div>
         <div>
-          <Alert color='primary'>Help</Alert>
           {msgs}
         </div>
         <Stage width={800} height={800}>
