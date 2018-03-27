@@ -57,6 +57,7 @@ class CheckersGame extends React.Component {
   }
 
   receiveMessage(resp) {
+    console.log("resp", resp)
     console.log("game", resp["game"])
     this.receiveGame(resp["game"])
   }
