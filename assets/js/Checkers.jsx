@@ -19,6 +19,7 @@ class CheckersGame extends React.Component {
       crownImage: null,
       messages: [],
       prevClick: null,
+      playerColor: "",
     }
 
     this.channel.join()
@@ -60,6 +61,9 @@ class CheckersGame extends React.Component {
     console.log("resp", resp)
     console.log("game", resp["game"])
     this.receiveGame(resp["game"])
+    this.setState({
+      playerColor: resp["player"]
+    })
   }
 
   receiveGame(game) {
@@ -150,6 +154,7 @@ class CheckersGame extends React.Component {
       checkers,
       crownImage,
       messages,
+      playerColor,
     } = this.state
 
     const grid = []
@@ -203,6 +208,7 @@ class CheckersGame extends React.Component {
           </Layer>
         </Stage>
         <Button onClick={this.restartGame.bind(this)}>Restart Game</Button>
+        <span>You are playing as: {playerColor} </span>
       </div>
     )
     // }
