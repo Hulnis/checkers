@@ -190,6 +190,9 @@ class CheckersGame extends React.Component {
     const msgs = messages.map((msg) => {
       <Alert color="primary" key="msg">{msg}</Alert>
     })
+    msgs.push(
+      <Alert color="primary">{messages[0]}</Alert>
+    )
     console.log("drawing messages", msgs)
 
     return (
