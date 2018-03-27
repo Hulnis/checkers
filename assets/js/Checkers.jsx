@@ -99,7 +99,7 @@ class CheckersGame extends React.Component {
     console.log("adding message -----", message)
     if (message != null) {
       if (messages.length >= 3) {
-        messages.slice()
+        messages.shift()
       }
       messages.push(message)
       this.setState({
@@ -187,8 +187,8 @@ class CheckersGame extends React.Component {
     grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
                stroke="black" strokeWidth={10}/>)
 
-    const msgs = messages.map((msg) => {
-      return <Alert color="primary" key={msg}>{msg}</Alert>
+    const msgs = messages.map((msg, index) => {
+      return <Alert color="primary" key={index}>{msg}</Alert>
     })
     console.log("drawing messages", msgs)
 
