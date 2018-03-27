@@ -86,7 +86,7 @@ class CheckersGame extends React.Component {
         })
       }
     })
-    this.receiveMessage(game.message)
+    this.receiveUserMessage(game.message)
     this.setState({
       checkers: checkers,
     })
