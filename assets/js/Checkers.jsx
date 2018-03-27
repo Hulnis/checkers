@@ -99,8 +99,9 @@ class CheckersGame extends React.Component {
     if (messages.length >= 3) {
       messages.slice()
     }
+    messages.push(message)
     this.setState({
-      messages: messages.push(message)
+      messages: messages
     })
   }
 
