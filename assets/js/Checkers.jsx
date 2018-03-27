@@ -27,19 +27,21 @@ class CheckersGame extends React.Component {
 
     this.channel.on("update", (resp) => {
       console.log("update message", resp["game"])
+      this.receiveUserMessage(resp["message"])
       this.receiveGame(resp["game"])
     })
 
     this.channel.on("restart", (resp) => {
+        this.receiveUserMessage(resp["message"])
         this.receiveGame(resp["game"])
     })
 
     this.channel.on("winner", (resp) => {
-        alert("You won!")
+        this.receiveUserMessage("You Won!")
     })
 
     this.channel.on("loser", (resp) => {
-        alert("You fail!")
+        this.receiveUserMessage("You Fail!")
     })
   }
 
