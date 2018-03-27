@@ -11,7 +11,8 @@ defmodule Checkers.Game do
     |> Enum.concat(Enum.map(24..39, fn _ -> nil end))
     |> Enum.concat(List.flatten(Enum.map([40, 48, 56], &(init_row(&1, :black)))))
 
-    %{board: board, black_loss: 0, red_loss: 0, current_player: nil, players: %{}}
+    %{board: board, black_loss: 0, red_loss: 0, current_player: nil, 
+      players: %{}, current_piece: nil}
   end
 
   defp init_row(first, color) do
@@ -57,38 +58,45 @@ defmodule Checkers.Game do
   def take_turn(state, player, index, to) do
     from = Enum.at(state[:board], index)
     cond do
-      player != state[:current_player] or
-      length(Map.keys(state[:players])) != 2 or
-      from == nil or
-      from[:color] != state[:players][player] or
+      player != state[:current_player] ->
+        {"It's not your turn!", state}
+      length(Map.keys(state[:players])) != 2 ->
+        {"Still waiting for player 2...", state}
+      from == nil ->
+        {"No piece was selected.", state}
+      from[:color] != state[:players][player] ->
+        {"You can't move your opponent's piece!", state}
       Enum.at(state[:board], to) != nil ->
-        state
-      to in possible_moves(from) ->
-        move(state, from, to)
-      to in possible_jumps(from) ->
-        jump(state, from, to)
+        {"That space is already occupied!", state}
+      state[:current_piece] != nil and state[:current_piece] != from[:index] ->
+        {"You must move the same piece you previously moved.", state}
+      to in possible_moves(from) and state[:current_piece] == nil ->
+        {nil, move(state, from, to)}
+      to in possible_jumps(from) and 
+      (state[:current_piece] == nil or state[:current_piece] == from[:index]) ->
+        {nil, jump(state, from, to)}
       true ->
-        state
+        {"Invalid move or jump.", state}
    end
   end
 
-  defp possible_moves(from = %{direction: 0}) do
-    possible_moves(%{from | direction: 1}) ++ possible_moves(%{from | direction: -1})
+  defp possible_moves(%{index: index, crowned: true, direction: direction}) do
+    possible_squares(index, 1, direction) ++ possible_squares(index, 1, -direction)
   end
 
   defp possible_moves(%{index: index, direction: direction}) do
     possible_squares(index, 1, direction)
   end
 
-  defp possible_jumps(from = %{direction: 0}) do
-    possible_jumps(%{from | direction: 1}) ++ possible_jumps(%{from | direction: -1})
+  defp possible_jumps(%{index: index, crowned: true, direction: direction}) do
+    possible_squares(index, 2, direction) ++ possible_squares(index, 2, -direction)
   end
 
   defp possible_jumps(%{index: index, direction: direction}) do
     possible_squares(index, 2, direction)
   end
 
-  defp possible_squares(index, row, direction) do
+  defp possible_squares(index, row, direction) do 
     Enum.map([index - row, index + row], &(&1 + 8 * row * direction))
     |> Enum.reject(&(&1 < 0 or &1 > 63))
     |> Enum.filter(&(div(&1, 8) == div(index, 8) + row * direction))
@@ -103,25 +111,40 @@ defmodule Checkers.Game do
   end
 
   defp jump(state, from = %{index: index}, to) do
-    from = %{from | index: to} |> crown(to)
-    board = state[:board]
-    |> List.replace_at(to, from)
-    |> List.replace_at(index, nil)
-    |> List.replace_at(index + div(to - index, 2), nil)
-    state = %{state | board: board}
+    if valid_jump(state, from, to) do
+      from = %{from | index: to} |> crown(to)
+      board = state[:board]
+      |> List.replace_at(to, from)
+      |> List.replace_at(index, nil)
+      |> List.replace_at(get_jump_piece(index, to), nil)
+      state = %{state | board: board}
 
-    state =
-      if state[:players][state[:current_player]] == :red do
-        %{state | black_loss: state[:black_loss] + 1}
+      state =
+        if state[:players][state[:current_player]] == :red do
+          %{state | black_loss: state[:black_loss] + 1}
+        else
+          %{state | red_loss: state[:red_loss] + 1}
+        end
+
+      if Enum.any?(possible_jumps(from), &(valid_jump(state, from, &1))) do
+        %{state | current_piece: to}
       else
-        %{state | red_loss: state[:red_loss] + 1}
+        %{state | current_player: next_player(state), current_piece: nil}
       end
-
-    if Enum.all?(possible_jumps(from), &(Enum.at(state[:board], &1) != nil)) do
-      %{state | current_player: next_player(state)}
     else
       state
     end
+  end
+
+  defp valid_jump(state, from = %{index: index}, to) do
+    jump_piece = Enum.at(state[:board], get_jump_piece(index, to))
+    jump_piece != nil and
+    jump_piece[:color] != from[:color] and
+    Enum.at(state[:board], to) == nil
+  end
+
+  defp get_jump_piece(index, to) do
+    index + div(to - index, 2)
   end
 
   defp crown(from, to) do
@@ -136,10 +159,10 @@ defmodule Checkers.Game do
   end
 
   @doc """
-  Returns whether the current player won.
+  Returns whether the given player won.
   """
-  def is_winner?(state) do
-    if state[:players][state[:current_player]] == :red do
+  def is_winner?(state, player) do
+    if state[:players][player] == :red do
       state[:black_loss] == 12
     else
       state[:red_loss] == 12

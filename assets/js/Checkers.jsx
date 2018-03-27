@@ -29,6 +29,18 @@ class CheckersGame extends React.Component {
       console.log("update message", resp["game"])
       this.receiveGame(resp["game"])
     })
+
+    this.channel.on("restart", (resp) => {
+        this.receiveGame(resp["game"])
+    })
+
+    this.channel.on("winner", (resp) => {
+        alert("You won!")
+    })
+
+    this.channel.on("loser", (resp) => {
+        alert("You fail!")
+    })
   }
 
   componentDidMount() {
@@ -44,12 +56,6 @@ class CheckersGame extends React.Component {
 
   receiveMessage(resp) {
     console.log("game", resp["game"])
-    console.log("player_id",  resp["player"])
-    const player_id = resp["player"] || this.state.player_id
-
-    this.setState({
-      player_id: player_id
-    })
     this.receiveGame(resp["game"])
   }
 
@@ -116,10 +122,9 @@ class CheckersGame extends React.Component {
     if(typeof(prevClick) === "number") {
       console.log("Index of rect", index)
       this.channel.push("turn", {
-        player: player_id,
         from: prevClick,
         to: index,
-      }).receive("ok", this.receiveMessage.bind(this))
+      })
       this.setState({
         prevClick: null
       })
