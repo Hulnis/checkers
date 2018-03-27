@@ -9,14 +9,14 @@ defmodule CheckersWeb.Channel do
       game = Checkers.Backup.load(name) || Game.init()
       {id, game} = Game.add_player(game)
       if id == -1 do
-        {:error, %{"reason" => "game already has two players"}}
+        {:error, %{"reason" => "Game already has two players."}}
       else
         socket = assign(socket, :name, name)
         |> assign(:game, game)
         |> assign(:player, id)
         Checkers.Backup.save(socket.assigns[:name], game)
         send(self(), :after_join)
-        {:ok, %{"join" => name, "game" => game, "player" => id}, socket}
+        {:ok, %{"join" => name, "game" => game[:board], "player" => game[:players][id]}, socket}
       end
     end
 
@@ -25,9 +25,9 @@ defmodule CheckersWeb.Channel do
       {:noreply, socket}
     end
 
-    def handle_out("update", update = %{"game" => game}, socket) do
+    def handle_out("update", %{"game" => game}, socket) do
       socket = assign(socket, :game, game)
-      push(socket, "update", update)
+      push(socket, "update", %{"game" => game[:board]})
       {:noreply, socket}
     end
 
@@ -36,8 +36,8 @@ defmodule CheckersWeb.Channel do
       socket = assign(socket, :game, game)
       |> assign(:player, id)
       Checkers.Backup.save(socket.assigns[:name], game)
-      push(socket, "restart", %{"game" => game, "player" => id})
-      broadcast_from(socket, "update", %{"game" => game, "message" => "Game Restarted"})
+      push(socket, "restart", %{"game" => game[:board], "player" => game[:players][id]})
+      broadcast_from(socket, "update", %{"game" => game, "message" => "Game restarted."})
       {:noreply, socket}
     end
 
@@ -45,7 +45,7 @@ defmodule CheckersWeb.Channel do
       player = socket.assigns[:player]
       {message, game} = Game.take_turn(socket.assigns[:game], player, from, to)
       Checkers.Backup.save(socket.assigns[:name], game)
-      push(socket, "update", %{"game" => game, "message" => message})
+      push(socket, "update", %{"game" => game[:board], "message" => message})
       broadcast_from(socket, "update", %{"game" => game, "message" => nil})
       if Game.is_winner?(game, player) do
         push(socket, "winner", %{})
@@ -60,8 +60,8 @@ defmodule CheckersWeb.Channel do
       socket = assign(socket, :game, game)
       |> assign(:player, id)
       Checkers.Backup.save(socket.assigns[:name], game)
-      broadcast_from(socket, "restart", %{"game" => game, "message" => "Game Restarted"})
-      {:reply, {:ok, %{"game" => game, "player" => id}}, socket}
+      broadcast_from(socket, "restart", %{"game" => game, "message" => "Game restarted."})
+      {:reply, {:ok, %{"game" => game[:board], "player" => game[:players][id]}}, socket}
     end
 
     def handle_in("disconnect", %{}, socket) do

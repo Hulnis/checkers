@@ -64,8 +64,7 @@ class CheckersGame extends React.Component {
 
   receiveGame(game) {
     console.log("game receive", game)
-    console.log("game receive board", game.board)
-    const grid = game["board"]
+    const grid = game
     const checkers = []
 
     grid.forEach((grid) => {

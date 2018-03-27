@@ -2,6 +2,6 @@
   <div class="col">
     <h1 id="index-page">Join a Game</h1>
     <p><input id="text" type="text"></p>
-    <button id="join">Join</button>
+    <button id="join" class="btn btn-primary">Join</button>
   </div>
 </div>
