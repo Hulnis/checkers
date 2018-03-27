@@ -83,10 +83,9 @@ class CheckersGame extends React.Component {
         })
       }
     })
-    const messages = []//this.receiveMessage(game.message)
+    this.receiveMessage(game.message)
     this.setState({
       checkers: checkers,
-      messages: messages,
     })
   }
 
@@ -97,7 +96,9 @@ class CheckersGame extends React.Component {
     if (messages.length >= 3) {
       messages.slice()
     }
-    return messages.push(message)
+    this.setState({
+      messages: messages.push(message)
+    })
   }
 
   clickChecker(index) {
@@ -105,7 +106,7 @@ class CheckersGame extends React.Component {
       prevClick,
     } = this.state
     if(prevClick) {
-      console.log("you fail!")
+      this.receiveUserMessage("Invalid Click")
     } else {
       this.setState({
         prevClick: index
@@ -120,7 +121,6 @@ class CheckersGame extends React.Component {
     } = this.state
 
     if(typeof(prevClick) === "number") {
-      console.log("Index of rect", index)
       this.channel.push("turn", {
         from: prevClick,
         to: index,
@@ -129,7 +129,7 @@ class CheckersGame extends React.Component {
         prevClick: null
       })
     } else {
-      console.log("you fail!")
+      this.receiveUserMessage("Invalid Click")
     }
   }
 
@@ -144,13 +144,7 @@ class CheckersGame extends React.Component {
       crownImage,
       messages,
     } = this.state
-    // const demoCheckers = []
-    // demoCheckers.push({
-    //   color: "red",
-    //   index: 0,
-    //   x: 1,
-    //   y: 1,
-    // })
+
     const grid = []
     var colorSwitch = true
     for (var x = 0; x < 8; x++) {
@@ -185,14 +179,14 @@ class CheckersGame extends React.Component {
     })
     grid.push(<Rect key="outside" x={0} y={0} width={800} height={800} fillEnabled={false}
                stroke="black" strokeWidth={10}/>)
-    // <div>
-    //   {messages.map((msg) => {
-    //     <Alert color="primary">msg</Alert>
-    //   })}
-    // </div>
+
     return (
       <div>
-
+        <div>
+          {messages.map((msg) => {
+            <Alert color="primary">msg</Alert>
+          })}
+        </div>
         <Stage width={800} height={800}>
           <Layer>
             { grid }
