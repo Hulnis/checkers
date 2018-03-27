@@ -37,7 +37,7 @@ defmodule CheckersWeb.Channel do
       |> assign(:player, id)
       Checkers.Backup.save(socket.assigns[:name], game)
       push(socket, "restart", %{"game" => game, "player" => id})
-      broadcast_from(socket, "update", %{"game" => game})
+      broadcast_from(socket, "update", %{"game" => game, "message" => "Game Restarted"}})
       {:noreply, socket}
     end
 
