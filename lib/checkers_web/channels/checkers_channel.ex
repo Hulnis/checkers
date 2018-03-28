@@ -76,7 +76,7 @@ defmodule CheckersWeb.Channel do
 
     def handle_in("disconnect", %{}, socket) do
       game = socket.assigns[:game]
-      if length(Map.keys(game[:players]) == 2 do
+      if length(Map.keys(game[:players])) == 2 do
         player = socket.assigns[:player]
         game = %{game | players: Map.delete(game[:players], player)}
         Checkers.Backup.save(socket.assigns[:name], game)
