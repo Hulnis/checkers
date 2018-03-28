@@ -76,6 +76,7 @@ defmodule CheckersWeb.Channel do
 
     def handle_in("disconnect", %{}, socket) do
       broadcast_from(socket, "winner", %{})
+      Checkers.Backup.delete(socket.assigns[:name])
       {:noreply, socket}
     end
 end
