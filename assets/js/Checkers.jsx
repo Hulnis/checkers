@@ -19,6 +19,7 @@ class CheckersGame extends React.Component {
       crownImage: null,
       messages: [],
       prevClick: null,
+      playerColor: "",
     }
 
     this.channel.join()
@@ -46,7 +47,6 @@ class CheckersGame extends React.Component {
   }
 
   componentDidMount() {
-    console.log("image", imageObj)
     const imageObj = new window.Image()
     imageObj.src = "https://upload.wikimedia.org/wikipedia/commons/2/25/Simple_gold_crown.svg"
     imageObj.onload = () => {
@@ -57,13 +57,13 @@ class CheckersGame extends React.Component {
   }
 
   receiveMessage(resp) {
-    console.log("resp", resp)
-    console.log("game", resp["game"])
     this.receiveGame(resp["game"])
+    this.setState({
+      playerColor: resp["player"]
+    })
   }
 
   receiveGame(game) {
-    console.log("game receive", game)
     const grid = game
     const checkers = []
 
@@ -95,13 +95,11 @@ class CheckersGame extends React.Component {
     var {
       messages
     } = this.state
-    console.log("adding message -----", message)
     if (message != null) {
       if (messages.length >= 3) {
         messages.shift()
       }
       messages.push(message)
-      messages = messages.reverse()
       this.setState({
         messages: messages
       })
@@ -150,6 +148,7 @@ class CheckersGame extends React.Component {
       checkers,
       crownImage,
       messages,
+      playerColor,
     } = this.state
 
     const grid = []
@@ -170,7 +169,6 @@ class CheckersGame extends React.Component {
         grid.push(square)
       }
     }
-    console.log("checker", checkers)
     checkers.forEach((checker) => {
       grid.push( <Circle key={checker.index} fill={checker.color} x={(checker.x * 100) + 50} y={(checker.y * 100) + 50}
         radius={40} onClick={() => this.clickChecker(checker.index)} />
@@ -190,7 +188,6 @@ class CheckersGame extends React.Component {
     const msgs = messages.map((msg, index) => {
       return <Alert color="primary" key={index}>{msg}</Alert>
     })
-    console.log("drawing messages", msgs)
 
     return (
       <div>
@@ -203,6 +200,7 @@ class CheckersGame extends React.Component {
           </Layer>
         </Stage>
         <Button onClick={this.restartGame.bind(this)}>Restart Game</Button>
+        <span>  You are playing as: {playerColor} </span>
       </div>
     )
     // }
