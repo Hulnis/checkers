@@ -209,8 +209,8 @@ class CheckersGame extends React.Component {
           </Layer>
         </Stage>
         <Button onClick={this.restartGame.bind(this)}>Restart Game</Button>
-        <span>  You are playing as: {playerColor} </span>
-        <span>   </span>
+        <span>  You are playing as: {playerColor}. </span>
+        <span>  It is {whoseTurn}'s turn.' </span>
       </div>
     )
     // }
