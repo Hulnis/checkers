@@ -18,14 +18,14 @@ defmodule CheckersWeb.Channel do
         send(self(), :after_join)
         whose_turn = game[:players][game[:current_player]]
         {:ok, %{"join" => name, "game" => game[:board], 
-          "player" => game[:players][id]} "whoseTurn" => whose_turn, socket}
+          "player" => game[:players][id], "whoseTurn" => whose_turn}, socket}
       end
     end
 
     def handle_info(:after_join, socket) do
       game = socket.assigns[:game]
       whose_turn = game[:players][game[:current_player]]
-      broadcast_from(socket, "update", %{"game" => game, "whoseTurn" => whose_turn]})
+      broadcast_from(socket, "update", %{"game" => game, "whoseTurn" => whose_turn})
       {:noreply, socket}
     end
 
