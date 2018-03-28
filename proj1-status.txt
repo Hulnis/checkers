@@ -1,0 +1,48 @@
+
+Web Dev Spring 2018 Project 1 Status
+
+Answer the following questions:
+
+
+1. What are the names of the members of your team?
+Eric Parker, Michael Trichilo
+
+
+2. What's the URL of the github repo with your code for this project?
+https://github.com/Hulnis/checkers
+
+
+3. What's the version number of your github release?
+1.0
+
+https://github.com/Hulnis/checkers/releases/tag/1.0
+
+
+4. What's the URL that you deployed to?
+http://checkers.michaeltri.ch
+
+
+5. Is your app functionality complete? If not, what's missing?
+Yes!
+
+
+6. Is your app properly deployed? If not, what went wrong?
+Yes!
+
+
+7. What parts of the project did each team member work on?
+Eric Parker: mainly frontend
+Michael Trichilo: mainly backend.
+
+
+
+And here's a list of tasks for grading comments. Just leave this here:
+ - Development
+ - Deployment
+ - Submission
+ - Report
+   - 1
+   - 2
+   - 3
+   - 4
+   - 5
