@@ -21,4 +21,11 @@ defmodule Checkers.Backup do
   def load(name) do
     Agent.get(__MODULE__, &(Map.get(&1, name)))
   end
+
+  @doc """
+  Deletes the game with the given key.
+  """
+  def delete(name) do
+    Agent.update(__MODULE__, &(Map.delete(&1, name)))
+  end
 end
