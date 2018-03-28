@@ -100,7 +100,6 @@ class CheckersGame extends React.Component {
         messages.shift()
       }
       messages.push(message)
-      messages = messages.reverse()
       this.setState({
         messages: messages
       })
